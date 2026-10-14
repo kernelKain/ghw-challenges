@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { createEmptySession, setBrief, setBackend, applyDefault, goBack, setBuildSetup, setTimeBudget } from "./engine/workflow";
+import Ideas from "./Ideas";
 
 export default function Workshop({ sample }: { sample: boolean }) {
   const [session, setSession] = useState<any>(() => createEmptySession(sample ? "sample" : "live"));
@@ -82,7 +83,7 @@ export default function Workshop({ sample }: { sample: boolean }) {
           <div className="card">
             <h2>Team and coding setup</h2>
             <button className="btn primary" onClick={() => run((x:any)=>setBuildSetup(x,"AI-assisted","Cursor","available model",undefined,"solo"))}>Use recommended default (solo, AI-assisted, Cursor)</button>
-            <button className="btn" style={{marginLeft:8}} onClick={() => run((x:any)=>({...x,currentStep:"ideation_generating"}))}>Continue</button>
+            <button className="btn" style={{marginLeft:8}} onClick={() => run((x:any)=>({...x,currentStep:"idea_review"}))}>Continue to ideas (sample)</button>
           </div>
         )}
 
@@ -94,7 +95,7 @@ export default function Workshop({ sample }: { sample: boolean }) {
           </div>
         )}
 
-        {s.currentStep === "idea_review" && <div className="card"><h2>Ideas</h2><p className="hidden-unknown">Not generated.</p></div>}
+        {s.currentStep === "idea_review" && <Ideas />}
         {s.currentStep.startsWith("gate_") && <div className="card"><h2>Gate</h2><p className="hidden-unknown">Not implemented in this phase.</p></div>}
       </main>
       <aside className="context" aria-label="Context">
