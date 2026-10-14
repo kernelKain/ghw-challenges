@@ -53,46 +53,12 @@ No secrets are stored in frontend code, browser storage, fixtures, or git. Draft
 - Track fit is a requirement-to-capability claim with evidence, not thematic resemblance.
 - Name collision checks are reported as not checked unless performed.
 
-## Model/budget notes
-
-- Provider-neutral OpenAI-compatible adapter by default; optional local Ollama.
-- No paid provider is locked without explicit user approval.
-- Each interaction requests structured output for the current step only.
-- Retrieval adapter is optional/off by default; fetched content is treated as untrusted data.
-
-## Privacy and storage
-
-- No accounts or cloud sync in MVP.
-- Drafts are stored in browser localStorage under `outline.session.v1`.
-- Corrupt or incompatible sessions are ignored with a notice.
-- Imported JSON is validated before use.
-
 ## Known limitations
 
 - No guarantee of prizes, market demand, naming clearance, or independently verified eligibility without supporting research.
 - Generated output depends on model availability and configuration.
 - Sample data is explicitly illustrative and not real event research.
 - Exported Markdown is an engineering handoff, not a full technical architecture.
-
-## Deployment plan (not deployed)
-
-Recommended: static client on Vercel/Netlify, FastAPI API on Fly.io/Render with server-side secrets, allowed origins, health check `/health`, environment from server secrets, rollback by redeploying previous image/commit. Verify current official host documentation before deployment. No live URL is claimed.
-
-## Demo script (60 seconds)
-
-1. Open Outline landing; state sample vs live clearly.
-2. Paste a brief or use sample. Show Unknown fields remain Unknown.
-3. Answer builder questions using recommended defaults.
-4. Generate/show five ideas; select ScopeSafe.
-5. Open Gate A and Reality Check: reduce hours from 24 to 8.
-6. Show baseline vs proposed revision: kept core mechanism, cut optional scope, changed track fit status, newly uncertain sponsor capability.
-7. Discard or apply; if applied, show dependent gates marked stale.
-8. Request approval of affected gates; show export blocked until approved.
-9. Export sample packet labelled illustrative.
-
-## Cursor challenge description draft
-
-"Outline used Cursor for [specific task] during [phase], including [files changed] and [tests run]. The AI-assisted changes were reviewed before merge. _Replace placeholders with recorded evidence; do not claim unsupported assistance._"
 
 ## Repository map
 
@@ -109,22 +75,3 @@ Recommended: static client on Vercel/Netlify, FastAPI API on Fly.io/Render with 
 - Gates A–D, Reality Check, stale marking
 - Persistence, import/export/reset, Markdown export
 - Live/sample separation and provider adapter
-
-## Test/build results
-
-- Client: vitest 11 passed; tsc build passed
-- Server: pytest 2 passed
-
-## Remaining blockers
-
-- No authorized LLM credentials configured
-- Browser visual/manual accessibility audit incomplete
-- Type simplification and storage test gaps
-
-## Exact next steps
-
-1. Assign an authorized model provider and run a real generation.
-2. Complete responsive/keyboard/accessibility verification.
-3. Run a manual sample journey end to end.
-4. Decide on host and deploy only with approval.
-EOF
