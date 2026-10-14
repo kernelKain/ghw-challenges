@@ -1,0 +1,30 @@
+{
+  "name": "outline-client",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "preview": "vite preview",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "lint": "eslint . --max-warnings 0"
+  },
+  "dependencies": {
+    "react": "*",
+    "react-dom": "*",
+    "zod": "*"
+  },
+  "devDependencies": {
+    "@types/react": "*",
+    "@types/react-dom": "*",
+    "@vitejs/plugin-react": "*",
+    "eslint": "*",
+    "typescript": "*",
+    "vite": "*",
+    "vitest": "*",
+    "@testing-library/react": "*",
+    "@testing-library/jest-dom": "*"
+  }
+}
