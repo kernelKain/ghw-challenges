@@ -18,7 +18,7 @@ const ideas = [
     mechanism: "Validated export", requirementProof: "Req: handoff -> capability", sponsor: "LLM", defensibility: "DRAFT watermark", analogue: "Notes", productPotential: "Moat", naming: "Not checked", backup: "Packet", sources: ["prompt0"] }
 ];
 
-export default function Ideas() {
+export default function Ideas({ onSelect }: { onSelect?: (id:number)=>void }) {
   const [selected, setSelected] = useState<number | null>(null);
   const [expanded, setExpanded] = useState<number | null>(null);
   const [compareIds, setCompareIds] = useState<number[]>([]);
@@ -66,7 +66,7 @@ export default function Ideas() {
             <p style={{fontSize:14}}><strong>Track:</strong> {i.primaryTrack}</p>
             <p style={{fontSize:14}}><strong>Build fit:</strong> {i.buildFit}. <strong>Risk:</strong> {i.mainRisk}</p>
             <div style={{display:"flex", gap:8, flexWrap:"wrap", marginTop:8}}>
-              <button className="btn" onClick={() => setSelected(i.id)}>Select</button>
+              <button className="btn" onClick={() => { setSelected(i.id); onSelect && onSelect(i.id); }}>Select</button>
               <button className="btn" onClick={() => setExpanded(expanded === i.id ? null : i.id)}>Expand</button>
             </div>
             {expanded === i.id && (

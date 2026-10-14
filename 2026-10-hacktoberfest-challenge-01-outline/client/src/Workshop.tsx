@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { createEmptySession, setBrief, setBackend, applyDefault, goBack, setBuildSetup, setTimeBudget } from "./engine/workflow";
+import { createEmptySession, setBrief, setBackend, applyDefault, goBack, setBuildSetup, setTimeBudget, selectIdea } from "./engine/workflow";
+import Gates from "./Gates";
 import Ideas from "./Ideas";
 
 export default function Workshop({ sample }: { sample: boolean }) {
@@ -95,7 +96,8 @@ export default function Workshop({ sample }: { sample: boolean }) {
           </div>
         )}
 
-        {s.currentStep === "idea_review" && <Ideas />}
+        {s.currentStep === "idea_review" && <Ideas onSelect={(id:number)=>run((x:any)=>selectIdea(x,id,"batch_1"))} />}
+        {String(s.currentStep).startsWith("gate_") && <Gates session={s} setSession={setSession} />}
         {s.currentStep.startsWith("gate_") && <div className="card"><h2>Gate</h2><p className="hidden-unknown">Not implemented in this phase.</p></div>}
       </main>
       <aside className="context" aria-label="Context">
