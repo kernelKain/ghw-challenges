@@ -2,6 +2,9 @@ import { useState } from "react";
 import { createEmptySession, setBrief, setBackend, applyDefault, goBack, setBuildSetup, setTimeBudget, selectIdea } from "./engine/workflow";
 import Gates from "./Gates";
 import Ideas from "./Ideas";
+import { saveSession, clearSession, validateImported } from "./storage";
+import { toMarkdown, safeFilename } from "./export";
+import { useEffect, useRef, useState as useS } from "react";
 
 export default function Workshop({ sample }: { sample: boolean }) {
   const [session, setSession] = useState<any>(() => createEmptySession(sample ? "sample" : "live"));
@@ -10,8 +13,10 @@ export default function Workshop({ sample }: { sample: boolean }) {
   const [hours, setHours] = useState("24");
   const [deadline, setDeadline] = useState("");
   const [tz, setTz] = useState("");
-
   const s = session;
+  useEffect(() => { saveSession(s); }, [s]);
+  const [importNotice, setImportNotice] = useS("");
+  const fileRef = useRef<HTMLInputElement>(null);
   const label = sample ? "Sample workshop — illustrative data" : null;
 
   function run(fn: (x: any) => any) { setSession((prev: any) => fn(prev)); }
@@ -102,6 +107,14 @@ export default function Workshop({ sample }: { sample: boolean }) {
       </main>
       <aside className="context" aria-label="Context">
         <h2>Context</h2>
+        <div style={{display:"flex",flexDirection:"column",gap:6,marginTop:8}}>
+          <button className="btn" onClick={() => { const md=toMarkdown(s); navigator.clipboard?.writeText(md).then(()=>alert("Copied")).catch(()=>alert("Clipboard unavailable")); }}>Copy packet</button>
+          <button className="btn" onClick={() => { const md=toMarkdown(s); const blob=new Blob([md],{type:"text/markdown"}); const a=document.createElement("a"); a.href=URL.createObjectURL(blob); a.download=safeFilename("outline-packet"); a.click(); }}>Download MD</button>
+          <button className="btn" onClick={() => { if (confirm("Reset this session?")) { clearSession(); window.location.reload(); } }}>Reset session</button>
+          <input ref={fileRef} type="file" accept="application/json" style={{display:"none"}} onChange={(e)=>{ const f=e.target.files?.[0]; if(!f) return; const r=new FileReader(); r.onload=()=>{ try { const v=validateImported(JSON.parse(String(r.result))); if(!v.ok) { setImportNotice(v.message); return; } setSession(v.session); setImportNotice(v.message); } catch { setImportNotice("Invalid JSON."); } }; r.readAsText(f); }} />
+          <button className="btn" onClick={()=>fileRef.current?.click()}>Import JSON</button>
+          {importNotice && <p className="hidden-unknown">{importNotice}</p>}
+        </div>
         <p><strong>Sources:</strong> {s.sources.length}</p>
         <p className="hidden-unknown">Constraints: {s.builder?.totalHours ?? "Unknown"} hours; deadline {s.builder?.deadline ?? "Unknown"}.</p>
         <p className="hidden-unknown">Unresolved: {s.brief?.missingFacts?.join(", ") || "Unknown"}</p>
